@@ -2,6 +2,10 @@
 
 \newcommand{\ifbooltrue}[2]{\ifthenelse{\boolean{#1}}{#2}{}}
 \newcommand{\ifboolfalse}[2]{\ifthenelse{\boolean{#1}}{}{#2}}
+\newtheorem{definition}{定义}[section]
+\newtheorem{theorem}{定理}[section]
+\newtheorem{remark}{备注}[section]
+\newtheorem{assumption}{假设}[section]
 
 \ifthenelse{\equal{\TwoSide}{true}}
 {
@@ -161,15 +165,6 @@
         \bfseries \zihao{-4}
         #1 \underline{\multido{}{5}{\quad}} \\
         \quad 年 \quad 月 \quad 日
-    \end{flushright}
-}
-
-\newcommand{\signaturewithdate}[4]
-{
-    \begin{flushright}
-        \bfseries \zihao{-4}
-        #1 \underline{\multido{}{5}{\quad}} \\
-        #2 年 #3 月 #4 日
     \end{flushright}
 }
 
