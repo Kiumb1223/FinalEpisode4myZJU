@@ -347,7 +347,7 @@ CLEAR指标是多目标跟踪领域最基础的评价指标体系，其中最核
 
 为了弥补MOTA对身份一致性关注不足的问题，IDF1指标被提出用于专门衡量跟踪结果中的身份保持能力。它将跟踪问题视为身份分类问题，计算基于身份匹配的精确率和召回率的调和平均数：
 \begin{equation}
-\text{IDF1} = \frac{2 \cdot \text{IDTP}}{2 \cdot \text{IDTP} + \text{IDFP} + \text{IDFN}},
+\text{IDF1} = \frac{2 \cdot \text{IDTP}}{2 \cdot \text{IDTP} + \text{IDFP} + \text{IDFN}}
 \end{equation}
 其中，$\text{IDTP}$表示身份匹配正确的检测数（Identity True Positives），$\text{IDFP}$ 表示身份匹配错误的检测数（Identity False Positives），$\text{IDFN}$表示身份漏匹配的检测数（Identity False Negatives）。IDF1越高，表明算法在长时跟踪中保持身份ID稳定的能力越强。
 
@@ -357,7 +357,7 @@ HOTA（Higher Order Tracking Accuracy）是近年来提出的一种新型多目�
 
 HOTA指标定义为在不同匹配阈值下检测准确率与关联准确率的集合平均，计算公式为：
 \begin{equation}
-\text{HOTA} = \sqrt{\text{DetA} \cdot \text{AssA}},
+\text{HOTA} = \sqrt{\text{DetA} \cdot \text{AssA}}
 \end{equation}
 其中，$\text{DetA}$ 表示检测准确率（Detection Accuracy），用于衡量目标是否被正确检测；$\text{AssA}$ 表示关联准确率（Association Accuracy），用于衡量目标在时间维度上的身份一致性。
 
@@ -417,13 +417,13 @@ RTTS 数据集为每张图像提供了目标检测标注，主要涵盖 \textit{
 在给定类别$c$的情况下，其平均精度（Average Precision, AP）定义为精确率–召回率（Precision–Recall）曲线下的面积，用于综合衡量检测结果的准确性与完整性。
 当预测框与真实框之间的交并比（Intersection over Union, IoU）满足：
 \begin{equation}
-\text{IoU} = \frac{\text{Area}(B_p \cap B_{gt})}{\text{Area}(B_p \cup B_{gt})} \geq \tau,
+\text{IoU} = \frac{\text{Area}(B_p \cap B_{gt})}{\text{Area}(B_p \cup B_{gt})} \geq \tau
 \end{equation}
 则该预测被视为正确检测，其中$B_p$和$B_{gt}$分别表示预测边界框与真实边界框，$\tau$为IoU阈值。
 
 本文主要采用$\tau = 0.5$的设置，即常用的mAP@0.5指标，并对所有类别的AP取平均，其定义为：
 \begin{equation}
-\text{mAP} = \frac{1}{C} \sum_{c=1}^{C} \text{AP}_c,
+\text{mAP} = \frac{1}{C} \sum_{c=1}^{C} \text{AP}_c
 \end{equation}
 其中 $C$ 表示目标类别总数。
 
