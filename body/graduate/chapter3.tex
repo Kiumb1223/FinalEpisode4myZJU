@@ -1,4 +1,5 @@
 \chapter{基于图神经网络的多目标跟踪算法研究}
+\label{ch:ch3}
 在前两章中，本文系统回顾了多目标跟踪任务的研究背景，并重点分析了图神经网络（GNN）在轨迹关联建模中的优势。现有基于图的跟踪方法多采用“边分类”范式，通过构建帧间稠密图判断连边关系，但存在图结构冗余、计算复杂度高的问题，往往难以满足在线应用对实时性的严苛要求。
 
 针对上述局限性，本章提出一种双图协同关联的在线跟踪器（Dual-Graph Collaborative Tracker，DGCTracker）。该方法摒弃了传统的帧间稠密构图方式，转而采用KNN自适应稀疏构图策略，将图规模显著降低。核心思想是通过构建静态图（Static Graph） 与动态图（Dynamic Graph） ，
@@ -54,7 +55,7 @@
     \caption{\label{fig:ch3_1}两种图构建方式对比示例}
 \end{figure}
 
-基于上述分析，本文将数据关联问题建模为一般图匹配（General Graph Matching）问题。如\autoref{fig:ch3_1}所示，本文摒弃了跨帧连接的二分图方式（如\autoref{fig:ch3_1}(a)），转而
+基于上述分析，本章将数据关联问题建模为一般图匹配（General Graph Matching）问题。如\autoref{fig:ch3_1}所示，本章摒弃了跨帧连接的二分图方式（如\autoref{fig:ch3_1}(a)），转而
 采用帧内独立构图策略（如\autoref{fig:ch3_1}(b)）：分别基于历史轨迹集合$\mathcal{L}^{t-1}$和当前检测集合$\mathcal{D}^{t}$构建两张独立的图$G^l$与$G^d$。
 在此框架下，数据关联不再直接预测跨图连边，而是通过图神经网络分别学习两张图中节点的上下文嵌入表示，再基于节点嵌入的相似性构建亲和矩阵。
 这一转变使得模型能够充分挖掘帧内目标间的几何与语义依赖关系，并将这些上下文信息编码进节点特征中，从而为跨帧匹配提供更具判别力的依据。
@@ -62,7 +63,7 @@
 
 \section{双图协同关联跟踪框架}
 \label{sec:ch3_2}
-在上一小节中，本文将在线多目标跟踪的数据关联问题形式化为一般图匹配问题，并指出通过帧内构图与节点嵌入学习，可以在降低计算复杂度的同时引入更丰富的上下文信息。本节在此基础上，详细介绍所提出的双图协同关联跟踪框架（DGCTracker）的整体设计与实现流程。
+在上一小节中，本章将在线多目标跟踪的数据关联问题形式化为一般图匹配问题，并指出通过帧内构图与节点嵌入学习，可以在降低计算复杂度的同时引入更丰富的上下文信息。本节在此基础上，详细介绍所提出的双图协同关联跟踪框架（DGCTracker）的整体设计与实现流程。
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=16cm]{chapter3/2.png}
@@ -72,7 +73,7 @@
 如\autoref{fig:ch3_2}所示，DGCTracker的整体工作流程包含三个核心阶段：
 
 \textbf{1. 稀疏图构建}：针对输入的历史轨迹集合$\mathcal{L}^{t-1}$与当前检测集合$\mathcal{D}^{t}$，分别独立构建轨迹图$G^l$与检测图$G^d$。
-为了避免全连接带来的计算冗余，本文采用 K-近邻（KNN）算法基于空间欧氏距离自适应生成稀疏拓扑结构；同时，融合目标的外观纹理与几何坐标信息，对图中的节点与边特征进行初始化编码，为后续的消息传递奠定基础。
+为了避免全连接带来的计算冗余，本章采用 K-近邻（KNN）算法基于空间欧氏距离自适应生成稀疏拓扑结构；同时，融合目标的外观纹理与几何坐标信息，对图中的节点与边特征进行初始化编码，为后续的消息传递奠定基础。
 
 \textbf{2. 双图特征提取与融合}：这是整个框架的核心组成部分。对构建的轨迹图与检测图，并行执行静态图卷积（Static GCN）和动态图卷积（Dynamic GCN）进行特征提取。Static GCN在固定的空间邻域中聚合信息，捕捉目标间稳定的局部几何结构；
 Dynamic GCN则基于节点嵌入间的相对差异来动态重构图的连接关系，以显式建模目标间的判别性差异与潜在的长程依赖。最后，通过层次化融合模块，生成多层次上下文信息的判别性节点嵌入。
@@ -86,21 +87,21 @@ Dynamic GCN则基于节点嵌入间的相对差异来动态重构图的连接关
 最后，\ref{subsec:ch3_2_4} 小节补充介绍提升模型泛化能力的鲁棒性数据增强策略。
 \subsection{稀疏图构建}
 \label{subsec:ch3_2_1}
-为了在降低计算复杂度的同时保留关键的局部空间上下文，本文舍弃了全连接图结构，转而采用基于空间距离的稀疏构图策略。针对历史轨迹集合$\mathcal{L}^{t-1}$与检测集合$\mathcal{D}^{t}$，分别构建轨迹图$G^l=(V^l,E^l)$与检测图$G^d=(V^d,E^d)$。
+为了在降低计算复杂度的同时保留关键的局部空间上下文，本章舍弃了全连接图结构，转而采用基于空间距离的稀疏构图策略。针对历史轨迹集合$\mathcal{L}^{t-1}$与检测集合$\mathcal{D}^{t}$，分别构建轨迹图$G^l=(V^l,E^l)$与检测图$G^d=(V^d,E^d)$。
 由于两者的构建过程完全一致，为表述方便，下文统一以轨迹图$G^l$为例进行阐述。
 
 \textbf{1. 基于KNN的拓扑结构建立}
 
 图构建的首要任务是确定节点集合与边集合，即定义图的拓扑结构。将$t-1$时刻的每一个轨迹视为图中的一个节点，形成节点集$V=\{v_i\}_{i=1}^{N_{t-1}}$。类似地，检测图$G^d$的节点集定义为当前时刻的所有检测目标。
 
-在边集合$E^l$的构建上，本文遵循“空间局部性”的假设：即相互靠近的目标之间更可能存在复杂的交互关系（如群体运动、遮挡、碰撞），而距离较远的目标间的影响则相对微弱。若构建全连接图，不仅引入了大量无用的噪声连接，还会导致计算量随节点数量呈平方级增长。
+在边集合$E^l$的构建上，本章遵循“空间局部性”的假设：即相互靠近的目标之间更可能存在复杂的交互关系（如群体运动、遮挡、碰撞），而距离较远的目标间的影响则相对微弱。若构建全连接图，不仅引入了大量无用的噪声连接，还会导致计算量随节点数量呈平方级增长。
 
-因此，本文采用K-近邻（K-Nearest Neighbors，KNN）算法来动态生成稀疏连接。具体而言，对于图中的任意节点$v_i$，计算其与其他所有节点在图像平面上的欧式距离，并选取距离最近的$k$个邻居节点$\mathcal{N}_k(v_i)$建立有向边：
+因此，本章采用K-近邻（K-Nearest Neighbors，KNN）算法来动态生成稀疏连接。具体而言，对于图中的任意节点$v_i$，计算其与其他所有节点在图像平面上的欧式距离，并选取距离最近的$k$个邻居节点$\mathcal{N}_k(v_i)$建立有向边：
 \begin{equation}
 E^l = \{ e_{ji} \mid v_j \in \mathcal{N}_k(v_i),\ \forall\, v_i \in V^l \}
 \end{equation}
 
-通过这种策略，图中的每个节点仅与其局部邻域内的$k$个目标（本文默认设置$k=2$）进行交互，将图的规模限制在线性复杂度$\mathcal{O}(kN)$，从而有效地降低了高密度场景下的计算瓶颈，为后续的图卷积操作提供高效的结构基础。
+通过这种策略，图中的每个节点仅与其局部邻域内的$k$个目标（默认设置为$k=2$）进行交互，将图的规模限制在线性复杂度$\mathcal{O}(kN)$，从而有效地降低了高密度场景下的计算瓶颈，为后续的图卷积操作提供高效的结构基础。
 
 \textbf{2. 节点与边嵌入初始化}
 
@@ -109,7 +110,7 @@ E^l = \{ e_{ji} \mid v_j \in \mathcal{N}_k(v_i),\ \forall\, v_i \in V^l \}
 \textbf{节点嵌入初始化}：每个节点$v_i$关联两个核心属性：空间位置与外观特征。空间位置由该轨迹在$t-1$时刻的边界框（Bounding Box）表征，包含中心点坐标$(x_i,y_i)$、宽度$w_i$与高度$h_i$。外观特征通过一个预训练好的行人重识别（Person Re-Identification， ReID）网络提取。
 该网络以目标的裁剪图像区域为输入，输出一个高维外观特征向量$f_i^{app}\in\mathbb{R}^{2048}$。为了适配图网络的输入维度同时避免特征淹没，进一步引入线性投影层对外观特征进行降维映射，并将其输出作为节点的初始嵌入表示 $h_i^{(0)}\in \mathbb{R}^{32}$。
 
-\textbf{边嵌入初始化}：为了充分利用目标间的空间结构关系，本文将节点间的相对几何差异编码为边特征，作为后续消息传递过程中重要的关系先验。对于一条从源节点$v_j$指向目标节点$v_i$的有向边$e_{ji}$，计算一个包含5个分量的归一化几何向量：
+\textbf{边嵌入初始化}：为了充分利用目标间的空间结构关系，本章将节点间的相对几何差异编码为边特征，作为后续消息传递过程中重要的关系先验。对于一条从源节点$v_j$指向目标节点$v_i$的有向边$e_{ji}$，计算一个包含5个分量的归一化几何向量：
 \begin{equation}
 \mathbf{g}_{ji} = \left[ \frac{2(x_i-x_j)}{h_i + h_j},\frac{2(y_i-y_j)}{h_i+h_j},\log(\frac{w_i}{w_j}),\log(\frac{h_i}{h_j}),1-\text{DIoU}(i,j) \right]
 \end{equation}
@@ -136,7 +137,7 @@ z_{ji}^{(0)} = f_\text{MLP}(\mathbf{g}_{ji})
 
 鉴于轨迹图与检测图在特征提取阶段采用完全一致的网络结构与参数配置，本节将两者统一抽象为图$G=(V,E)$进行一般化描述，并重点阐述其特征学习机制。
 
-在此统一建模框架下，本文进一步从关系建模的角度出发，将图$G$拆解为静态图$^{s}G$（Static Graph）与动态图$^{d}G$（Dynamic Graph）两种互补表示，分别用于刻画稳定的空间结构关系与判别性的语义差异关系。为了消除概念上的混淆，我们将两者的本质区别定义如下：
+在此统一建模框架下，本章进一步从关系建模的角度出发，将图$G$拆解为静态图$^{s}G$（Static Graph）与动态图$^{d}G$（Dynamic Graph）两种互补表示，分别用于刻画稳定的空间结构关系与判别性的语义差异关系。为了消除概念上的混淆，我们将两者的本质区别定义如下：
 \begin{itemize}
     \item \textbf{静态图}$^{s}G$：其拓扑结构由上一小节的基于KNN构建的稀疏邻接关系确定，在特征传播过程中保持不变，以此用于刻画目标在图像平面中的稳定的空间结构关系；
     \item \textbf{动态图}$^{d}G$：与静态图不同的是，其拓扑结构是根据节点嵌入在特征空间中的语义相似性进行动态重构，从而显式挖掘目标之间的判别性关系与潜在的长程依赖。
@@ -279,7 +280,7 @@ h_G = \Phi \left( \mathop{\oplus}\limits_{\beta} \left( ^{s}h_i^\beta,~ ^{d}h_i^
 \begin{itemize}
     \item \textbf{图节点上下文相似度（Graph Context Similarity）}：基于前述双图特征提取模块输出的高维节点嵌入$h_i^l$与$h_j^d$，计算两者的余弦相似度。该特征聚合了多阶邻域信息，反映了目标对的高维语义与拓扑结构上的一致性。
     \item \textbf{表观纹理相似度（Appearance Texture Similarity）}：我们复用\ref{subsec:ch3_2_1}小节中定义的初始节点嵌入$h^{l,(0)}$与$h^{d,(0)}$，即由ReID骨干网络降维投影后的表观特征，并计算目标对的表观相似度。该特征能够捕捉目标最原始的视觉纹理色彩信息，弥补图卷积过程中可能平滑掉的个体细节。
-    \item \textbf{几何运动一致性（Geometric Consistency）}：为了缓解行人姿态变化导致的包围框宽度不稳定性，本文采用高度感知交并比（HIoU） 。HIoU 仅基于高度方向计算重叠率，从而将几何约束重点聚焦于目标的深度一致性，有效剔除物理空间上不合理的候选匹配，提升了关联层对遮挡和形变的鲁棒性。
+    \item \textbf{几何运动一致性（Geometric Consistency）}：为了缓解行人姿态变化导致的包围框宽度不稳定性，本章采用高度感知交并比（HIoU） 。HIoU 仅基于高度方向计算重叠率，从而将几何约束重点聚焦于目标的深度一致性，有效剔除物理空间上不合理的候选匹配，提升了关联层对遮挡和形变的鲁棒性。
 \end{itemize}
 
 为了自适应地融合上述异构信息，我们将三种相似度矩阵在通道维度上进行拼接，构建出一个三维的粗粒度亲和张量。随后，将其送入一个由多层感知机（MLP）构成的亲和预测层（Affinity Layer）。该层通过学习不同模态在关联决策中的权重，并经过Sigmoid激活函数映射，输出最终的亲和得分。
@@ -367,7 +368,7 @@ Sinkhorn 算法最初用于求解带有边缘分布约束的最优传输问题�
 
 由于在线多目标跟踪中正负样本比例严重失衡（绝大多数轨迹-检测对为负样本），若直接采用标准二元交叉熵容易导致训练被大量易分类负样本主导，
 从而削弱了模型对困难样本（易混淆匹配）的学习能力。
-为此，本文采用 Focal Loss \cite{focalloss}对亲和矩阵进行监督学习，
+为此，本章采用 Focal Loss \cite{focalloss}对亲和矩阵进行监督学习，
 以增强模型对难分类样本的关注。
 
 首先定义逐元素的分类置信度矩阵$p_t$：
@@ -390,7 +391,7 @@ p_t = Y\odot \hat{S} + (1 -Y) \odot (1 - \hat{S})
     
 \textbf{（2） 推理阶段}
 
-在推理阶段，为获得满足严格互斥约束的一对一离散匹配结果，本文将$\hat{S}$转换为代价矩阵并采用匈牙利算法求解最优二分匹配。具体地，可定义代价为：
+在推理阶段，为获得满足严格互斥约束的一对一离散匹配结果，本章将$\hat{S}$转换为代价矩阵并采用匈牙利算法求解最优二分匹配。具体地，可定义代价为：
 \begin{equation}
     C=1-\hat{S}
 \end{equation}
@@ -511,7 +512,7 @@ L_{\text{sleep}}  = \{\, l \in \mathcal{L}^{t-1} \mid l.\text{state}  = \mathbf{
 
 \textbf{阶段一：基于图关联的主匹配阶段}
 
-本阶段旨在实现高可见度、高置信度目标的精确关联。将活跃轨迹集$L_{\text{active}}$与高置信度检测框$D_{\text{high}}$分别构建为轨迹图与检测图，并利用本文核心方法——双图协同关联网络（DGC）计算二者间的亲和度矩阵$\hat{S}$：
+本阶段旨在实现高可见度、高置信度目标的精确关联。将活跃轨迹集$L_{\text{active}}$与高置信度检测框$D_{\text{high}}$分别构建为轨迹图与检测图，并利用本章核心方法——双图协同关联网络（DGC）计算二者间的亲和度矩阵$\hat{S}$：
 \begin{equation}
     \hat{S} = \text{DGC}(L_\text{active},D_\text{high})
 \end{equation}
@@ -562,7 +563,7 @@ L_{\text{sleep}}  = \{\, l \in \mathcal{L}^{t-1} \mid l.\text{state}  = \mathbf{
 由于官方 MOT Challenge 评估服务器访问受限，为进行有效的消融研究与性能对比，我们采用一种在学术研究中广泛使用的替代划分方案。具体而言，对于 MOT16 与 MOT17 的每一个训练视频序列，我们将其最后连续的100帧划出作为测试集，其余帧则作为训练集。
 本节的所有定量实验均在此测试集上报告，以确保评估环境的一致性与公平性。
 
-此外，为了公平地评估本文提出的关联算法性能，并排除检测器质量差异带来的干扰，本节所有实验均严格遵循 Public Detection（公共检测）协议，即直接使用数据集官方提供的检测结果，而不引入额外的私有检测器进行推理。具体而言，在 MOT16 上使用 DPM 检测器结果，在 MOT17 上使用 SDP 检测器结果。
+此外，为了公平地评估本章提出的关联算法性能，并排除检测器质量差异带来的干扰，本节所有实验均严格遵循 Public Detection（公共检测）协议，即直接使用数据集官方提供的检测结果，而不引入额外的私有检测器进行推理。具体而言，在 MOT16 上使用 DPM 检测器结果，在 MOT17 上使用 SDP 检测器结果。
 
 在性能评估方面，我们采用多目标跟踪领域权威的评估工具包TrackEval\cite{TrackEval_2020}进行量化评估。使用的核心评价指标如第\ref{subsec:ch2_3_1}节所述，
 包括：高阶跟踪精度（HOTA）、检测精度（DetA）、关联精度（AssA）、识别F1分数（IDF1）、身份精确率（IDP）、身份召回率（IDR）、多目标跟踪精度（MOTA）和多目标跟踪精确度（MOTP）。
@@ -579,7 +580,7 @@ DGCTracker 的实现基于 PyTorch 与 PyTorch-Geometric 框架完成，并在�
 
 \subsection{与先进方法的对比}
 \label{subsec:ch3_4_2}
-为了验证本文提出的 DGCTracker 算法在复杂场景下的综合性能，本节在 MOT16 和 MOT17 测试集上进行了定量对比与定性分析。
+为了验证本章提出的 DGCTracker 算法在复杂场景下的综合性能，本节在 MOT16 和 MOT17 测试集上进行了定量对比与定性分析。
 我们将 DGCTracker 与当前主流的先进跟踪算法进行了比较，包括基于图神经网络的方法（GCNNMatch\cite{gcnnmatch}, GSM\cite{gsm}）以及基于运动和外观特征的先进方法（OC-SORT\cite{ocsort}, BoT-SORT\cite{botsort}, ImprAss-OC\cite{imprassoc}）。
 所有方法均在相同的数据划分与 Public Detection 协议下进行评测，以保证结果的公平性。
 
@@ -591,7 +592,7 @@ DGCTracker 的实现基于 PyTorch 与 PyTorch-Geometric 框架完成，并在�
     \caption{MOT16与MOT17测试集上主流在线跟踪方法性能对比}
     \label{tab:ch_3_4_2}
     \resizebox{\linewidth}{!}{
-    \begin{tabular}{clcccccccc}
+    \begin{tabular}{cccccccccc}
     \toprule
     \textbf{数据集} & \textbf{跟踪方法} & \textbf{HOTA} $\uparrow$ & \textbf{DetA} $\uparrow$ & \textbf{AssA} $\uparrow$ & \textbf{IDF1} $\uparrow$ & \textbf{IDR} $\uparrow$ & \textbf{IDP} $\uparrow$ & \textbf{MOTA} $\uparrow$ & \textbf{MOTP} $\uparrow$ \\
     \midrule
@@ -720,7 +721,7 @@ DGCTracker 在该场景下有效避免了这一问题。
     \textbf{图类型} & \textbf{HOTA} $\uparrow$ & \textbf{DetA} $\uparrow$ & \textbf{AssA} $\uparrow$ & \textbf{IDF1} $\uparrow$ & \textbf{IDR} $\uparrow$ & \textbf{IDP} $\uparrow$ & \textbf{MOTA} $\uparrow$ & \textbf{MOTP} $\uparrow$ \\
     \midrule
     无向图 & 58.18 & \textbf{56.54} & 62.47 & 67.48 & 56.98 & 82.71 & 64.90 & 84.62 \\
-    \textbf{有向图 (Ours)} & \textbf{61.65} & 56.42 & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
+    \textbf{有向图 (Default)} & \textbf{61.65} & 56.42 & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
     \bottomrule
   \end{tabular}
   }
@@ -750,7 +751,7 @@ DGCTracker 在该场景下有效避免了这一问题。
     \textbf{配置} & \textbf{HOTA} $\uparrow$ & \textbf{DetA} $\uparrow$ & \textbf{AssA} $\uparrow$ & \textbf{IDF1} $\uparrow$ & \textbf{IDR} $\uparrow$ & \textbf{IDP} $\uparrow$ & \textbf{MOTA} $\uparrow$ & \textbf{MOTP} $\uparrow$ \\
     \midrule
     有向自环图 & 61.36 & 56.40 & 67.17 & 71.08 & 59.94 & 87.29 & \textbf{65.67} & \textbf{84.69} \\
-    \textbf{有向无环图(Ours)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & 65.59 & 84.67 \\
+    \textbf{有向无环图(Default)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & 65.59 & 84.67 \\
     \bottomrule
   \end{tabular}
   }
@@ -762,7 +763,7 @@ DGCTracker 在该场景下有效避免了这一问题。
 这足以保证节点特征的稳定性。省略自环则迫使模型在每一层的消息聚合中，必须更充分地利用来自邻居的有效信息来更新自身，这有助于增强特征对局部上下文的敏感性。
 
 需要指出的是，在极端情况下（如图 \ref{fig:ch_3_15}(c)所示），当当前帧中仅存在单个目标节点时，无环图将退化为不包含任何有效边的孤立节点图，从而导致图卷积操作无法正常执行。
-为保证算法在该类场景下的健壮性，本文在工程实现中采用如下策略：当图中节点数为 1 时，默认补充自环边以保证图结构有效；当节点数大于 1 时，则使用有向无环图作为默认配置。
+为保证算法在该类场景下的健壮性，本章在工程实现中采用如下策略：当图中节点数为 1 时，默认补充自环边以保证图结构有效；当节点数大于 1 时，则使用有向无环图作为默认配置。
 
 \textbf{（3） 动态图构图方式的选择}
 
@@ -777,7 +778,7 @@ DGCTracker 在该场景下有效避免了这一问题。
     \textbf{度量方式} & \textbf{HOTA} $\uparrow$ & \textbf{DetA} $\uparrow$ & \textbf{AssA} $\uparrow$ & \textbf{IDF1} $\uparrow$ & \textbf{IDR} $\uparrow$ & \textbf{IDP} $\uparrow$ & \textbf{MOTA} $\uparrow$ & \textbf{MOTP} $\uparrow$ \\
     \midrule
     基于欧式距离 & 59.81 & 56.32 & 65.09 & 70.96 & 59.86 & 87.13 & 64.86 & \textbf{84.69} \\
-    \textbf{基于余弦距离(Ours)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & 84.67 \\
+    \textbf{基于余弦距离(Default)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & 84.67 \\
     \bottomrule
   \end{tabular}
   }
@@ -812,7 +813,7 @@ $K=2$ 的设置能够在“捕捉必要的局部空间上下文”（如遮挡�
     \toprule
     \textbf{不同K值} & \textbf{HOTA} $\uparrow$ & \textbf{DetA} $\uparrow$ & \textbf{AssA} $\uparrow$ & \textbf{IDF1} $\uparrow$ & \textbf{IDR} $\uparrow$ & \textbf{IDP} $\uparrow$ & \textbf{MOTA} $\uparrow$ & \textbf{MOTP} $\uparrow$ \\
     \midrule
-    \textbf{K=2 (Ours)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & 72.64 & 61.25 & 89.25 & 65.59 & 84.67 \\
+    \textbf{K=2 (Default)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & 72.64 & 61.25 & 89.25 & 65.59 & 84.67 \\
     4 & 61.50 & 56.40 & 67.37 & \textbf{72.76} & \textbf{61.33} & \textbf{89.44} & \textbf{65.61} & 84.61 \\
     6 & 61.53 & 56.17 & 67.51 & 72.62 & 61.22 & 89.25 & 65.44 & 84.60 \\
     8 & 59.91 & 56.14 & 64.76 & 70.30 & 59.30 & 86.36 & 65.17 & \textbf{84.70} \\
@@ -855,7 +856,7 @@ $K=2$ 的设置能够在“捕捉必要的局部空间上下文”（如遮挡�
     \textbf{配置} & \textbf{HOTA} $\uparrow$ & \textbf{DetA} $\uparrow$ & \textbf{AssA} $\uparrow$ & \textbf{IDF1} $\uparrow$ & \textbf{IDR} $\uparrow$ & \textbf{IDP} $\uparrow$ & \textbf{MOTA} $\uparrow$ & \textbf{MOTP} $\uparrow$ \\
     \midrule
     无残差连接 & 59.53 & 56.35 & 63.83 & 69.30 & 58.49 & 85.03 & 65.23 & 84.63 \\
-    \textbf{有残差连接 (Ours)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
+    \textbf{有残差连接 (Default)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
     \bottomrule
   \end{tabular}
   }
@@ -883,7 +884,7 @@ $K=2$ 的设置能够在“捕捉必要的局部空间上下文”（如遮挡�
     \textbf{聚合方式} & \textbf{HOTA} $\uparrow$ & \textbf{DetA} $\uparrow$ & \textbf{AssA} $\uparrow$ & \textbf{IDF1} $\uparrow$ & \textbf{IDR} $\uparrow$ & \textbf{IDP} $\uparrow$ & \textbf{MOTA} $\uparrow$ & \textbf{MOTP} $\uparrow$ \\
     \midrule
     Mean Pooling & 58.98 & 55.99 & 63.14 & 69.03 & 58.27 & 84.68 & 65.04 & 84.66 \\
-    \textbf{Max Pooling (Ours)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
+    \textbf{Max Pooling (Default)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
     \bottomrule
   \end{tabular}
   }
@@ -902,7 +903,7 @@ $K=2$ 的设置能够在“捕捉必要的局部空间上下文”（如遮挡�
     \textbf{归一化方式} & \textbf{HOTA} $\uparrow$ & \textbf{DetA} $\uparrow$ & \textbf{AssA} $\uparrow$ & \textbf{IDF1} $\uparrow$ & \textbf{IDR} $\uparrow$ & \textbf{IDP} $\uparrow$ & \textbf{MOTA} $\uparrow$ & \textbf{MOTP} $\uparrow$ \\
     \midrule
     BatchNorm & 61.48 & 56.35 & 67.32 & 71.70 & 60.49 & 88.02 & 64.99 & 84.59 \\
-    \textbf{GraphNorm (Ours)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
+    \textbf{GraphNorm (Default)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
     \bottomrule
   \end{tabular}
   }
@@ -930,7 +931,7 @@ $K=2$ 的设置能够在“捕捉必要的局部空间上下文”（如遮挡�
     2s + 1d & 60.43 & 56.08 & 65.33 & 71.45 & 60.21 & 87.85 & 65.35 & 84.60 \\
     3s & 59.67 & 55.79 & 64.01 & 70.17 & 59.13 & 86.29 & 65.04 & 84.52 \\
     3s + 1d & 60.80 & 56.27 & 65.88 & 71.48 & 60.29 & 87.76 & 65.30 & 84.61 \\
-    \textbf{3s + 2d (Ours)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
+    \textbf{3s + 2d (Default)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
     \bottomrule
   \end{tabular}
   }
@@ -940,7 +941,7 @@ $K=2$ 的设置能够在“捕捉必要的局部空间上下文”（如遮挡�
 1）静态图与动态图具有互补性，二者结合优于单一结构；
 2）足够的网络深度是必要的。更深的静态图卷积能整合多跳空间邻居的信息，
 捕获更广泛的几何上下文；而更深的动态图卷积则允许节点在特征空间中进行多轮迭代的相似性匹配与特征“推离”，
-从而学习到更具判别力的表示。这验证了本文设计的层次化特征提取架构的有效性。
+从而学习到更具判别力的表示。这验证了本章设计的层次化特征提取架构的有效性。
 
 \textbf{（5） 亲和矩阵的多模态特征融合}
 
@@ -957,7 +958,7 @@ $K=2$ 的设置能够在“捕捉必要的局部空间上下文”（如遮挡�
     Node Only & 48.65 & 51.56 & 46.26 & 54.01 & 45.27 & 66.95 & 56.50 & 82.98 \\
     Node + App & 53.78 & 54.01 & 53.88 & 61.41 & 51.69 & 75.64 & 61.76 & 84.02 \\
     Node + HIoU & 60.34 & 56.15 & 65.05 & 70.99 & 59.87 & 87.18 & 65.28 & 84.54 \\
-    \textbf{Triple (Ours)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
+    \textbf{Triple (Default)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
     \bottomrule
   \end{tabular}
   }
@@ -967,7 +968,7 @@ $K=2$ 的设置能够在“捕捉必要的局部空间上下文”（如遮挡�
 仅使用节点嵌入时，模型在 AssA 和 IDF1 上表现较差；
 引入外观或几何信息后性能显著提升，其中 Node+HIoU 相比 Node+App 取得更大增益，
 说明几何一致性在多目标跟踪中具有更强的约束能力。
-最终，三种信息联合使用时达到最优结果，验证了本文在亲和建模阶段引入多模态融合策略的合理性与必要性。
+最终，三种信息联合使用时达到最优结果，验证了本章在亲和建模阶段引入多模态融合策略的合理性与必要性。
 
 \textbf{3. 数据增强策略}
 
@@ -977,13 +978,13 @@ $K=2$ 的设置能够在“捕捉必要的局部空间上下文”（如遮挡�
   \centering
   \caption{数据增强策略对模型追踪性能的影响}
   \label{tab:ch_3_4_3_10}
-  \resizebox{0.9\linewidth}{!}{
+  \resizebox{1\linewidth}{!}{
   \begin{tabular}{ccccccccc}
     \toprule
     \textbf{配置} & \textbf{HOTA} $\uparrow$ & \textbf{DetA} $\uparrow$ & \textbf{AssA} $\uparrow$ & \textbf{IDF1} $\uparrow$ & \textbf{IDR} $\uparrow$ & \textbf{IDP} $\uparrow$ & \textbf{MOTA} $\uparrow$ & \textbf{MOTP} $\uparrow$ \\
     \midrule
     w/o Augmentation & 59.67 & 55.72 & 64.11 & 69.60 & 58.85 & 85.16 & 64.58 & 84.54 \\
-    \textbf{w/ Augmentation (Ours)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
+    \textbf{w/ Augmentation (Default)} & \textbf{61.65} & \textbf{56.42} & \textbf{67.56} & \textbf{72.64} & \textbf{61.25} & \textbf{89.25} & \textbf{65.59} & \textbf{84.67} \\
     \bottomrule
   \end{tabular}
   }
@@ -995,10 +996,10 @@ $K=2$ 的设置能够在“捕捉必要的局部空间上下文”（如遮挡�
 \label{sec:ch3_5}
 
 本章围绕在线多目标跟踪中的核心难点——在目标密集、遮挡频繁与外观相似的复杂场景下保持稳定的跨帧身份一致性——提出了一种双图协同关联的在线跟踪器 DGCTracker。
-不同于传统跨帧稠密构图并进行边分类的范式，本文将数据关联重新建模为帧内图表征学习与跨图匹配问题：分别对历史轨迹集合与当前检测集合进行稀疏构图，通过图神经网络学习包含上下文信息的节点嵌入，再基于节点嵌入相似性完成跨帧匹配，从而在降低计算冗余的同时增强关联判别能力。
+不同于传统跨帧稠密构图并进行边分类的范式，本章将数据关联重新建模为帧内图表征学习与跨图匹配问题：分别对历史轨迹集合与当前检测集合进行稀疏构图，通过图神经网络学习包含上下文信息的节点嵌入，再基于节点嵌入相似性完成跨帧匹配，从而在降低计算冗余的同时增强关联判别能力。
 
 具体而言，DGCTracker 采用 KNN 策略构建稀疏拓扑，并设计静态图卷积与动态图卷积的级联结构：静态分支在固定空间邻域内聚合几何先验以刻画稳定的局部结构关系，动态分支基于特征空间相似性动态重构邻接关系以挖掘语义层面的判别差异与潜在长程依赖。
-在匹配阶段，本文进一步融合图上下文相似度、外观相似度与几何一致性（HIoU）构建多模态亲和，并引入 Sinkhorn 可微归一化实现端到端的软指派优化，推理阶段结合匈牙利算法得到满足互斥约束的离散匹配结果。
+在匹配阶段，本章进一步融合图上下文相似度、外观相似度与几何一致性（HIoU）构建多模态亲和，并引入 Sinkhorn 可微归一化实现端到端的软指派优化，推理阶段结合匈牙利算法得到满足互斥约束的离散匹配结果。
 在此基础上，本章还设计了与关联模块深度耦合的三阶段轨迹管理机制，实现轨迹的生成、维持与终止，从而提升系统面对漏检、遮挡与噪声检测时的稳定性。
 
 实验部分在 MOT16/17 的本地划分上对方法进行了系统验证。

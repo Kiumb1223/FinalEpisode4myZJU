@@ -1,5 +1,73 @@
 \cleardoublepage
 \chapternonum{摘要}
+随着人工智能与智能感知技术在智能交通、自动驾驶等关键领域的深入应用，多目标跟踪系统在真实复杂环境下的鲁棒性面临严峻挑战。
+其核心难点主要在于两方面：一是在高密度、强遮挡的动态场景中，难以保持跨帧轨迹关联的稳定性与身份一致性；
+二是系统在雾天、弱光等恶劣视觉条件下，易因输入图像质量退化而导致感知性能显著下降。
+针对上述挑战，本文从轨迹关联建模与前端跨域增强两个层面展开系统性研究，旨在构建一个适应开放环境的鲁棒多目标检测与跟踪系统。
+
+在轨迹关联方面，本文提出了一种基于双图协同关联的在线多目标跟踪算法（DGCTracker）。
+该方法摒弃了传统的跨帧稠密构图范式，创新性地将关联问题建模为帧内构图与跨图匹配。
+通过构建静态图与动态图，分别利用图卷积网络提取目标间稳定的空间结构关系与判别性的语义差异特征，实现了局部与全局上下文信息的协同建模。
+此外，采用K-近邻稀疏构图与可微Sinkhorn优化匹配策略，在保证高关联精度的同时显著降低了计算复杂度。在MOT16/17等基准数据集上的实验表明，该算法在身份保持指标上优于多种主流方法。
+
+在跨域自适应方面，本文设计了一种双渐进滤波前端增强与检测框架（DPFE-YOLO）。
+该框架通过一个由视觉编码器引导的级联增强网络，将退化图像逐步恢复至清晰域。
+其核心双流滤波块能够并行执行全局像素级色调映射与局部结构细节恢复，并经由门控机制自适应融合。
+为解决端到端训练不稳定的问题，提出了“预热-联合”两阶段协同训练策略。
+在PASCAL VOC、ExDark及RTTS等跨域检测数据集上的验证结果表明，该方法能有效提升模型在雾天、弱光等恶劣条件下的检测精度。
+
+最终，本文将上述增强模块与检测器、跟踪器集成，构建了一套完整的“增强-检测-跟踪”管线。
+实验证明，该系统能够从源头缓解视觉退化，为下游跟踪任务提供鲁棒的感知输入，
+在合成退化场景中显著恢复了跟踪性能。本研究成果为复杂环境下实现稳定、可靠的多目标跟踪提供了新的思路和有效的解决方案。
+
+\vspace{2em}
+
+\textbf{关键词}: 多目标跟踪；图神经网络；图匹配；跨域自适应；图像增强；目标检测
+
 
 \cleardoublepage
 \chapternonum{Abstract}
+With the in-depth application of artificial intelligence and intelligent perception technologies in critical 
+fields such as intelligent transportation and autonomous driving, 
+the robustness of Multiple Object Tracking (MOT) systems in real-world 
+complex environments faces severe challenges. 
+The core difficulties primarily lie in two aspects: 
+first, in dynamic scenes with high density and strong occlusion, 
+it is difficult to maintain the stability of cross-frame trajectory association and 
+identity consistency; second, under adverse visual conditions such as fog and dark,
+the system's perception performance suffers significant degradation due to the deterioration 
+of input image quality. To address these challenges, this thesis conducts systematic 
+research from two dimensions: trajectory association modeling and front-end cross-domain enhancement, 
+aiming to construct a robust multi-object detection and tracking system adaptable to open environments.
+
+In terms of trajectory association, this thesis proposes an online multi-object tracking 
+algorithm based on Dual-Graph Collaborative association (DGCTracker). 
+By discarding the traditional cross-frame dense graph construction paradigm, 
+this method innovatively models the association problem 
+as intra-frame graph construction and cross-graph matching. 
+Through the construction of static and dynamic graphs, 
+Graph Convolutional Networks (GCNs) are utilized to extract stable spatial structural relationships 
+and discriminative semantic difference features among objects, respectively, achieving collaborative modeling 
+of local and global context information. Furthermore, by adopting K-Nearest Neighbor (KNN) 
+sparse graph construction and a differentiable Sinkhorn optimization matching strategy, the 
+algorithm significantly reduces computational complexity while ensuring high association accuracy. 
+Experiments on benchmark datasets such as MOT16/17 demonstrate that the proposed algorithm outperforms various mainstream methods in identity preservation metrics.
+
+In terms of cross-domain adaptation, this thesis designs a Dual-Progressive Filtering Enhancement and detection framework (DPFE-YOLO). 
+This framework progressively restores degraded images to the clear domain through a cascaded enhancement network 
+guided by a visual encoder. Its core dual-stream filtering block can execute global pixel-level tone mapping 
+and local structural detail restoration in parallel, which are then adaptively fused via a gating mechanism. 
+To address the instability of end-to-end training, a "Warm-up and Joint" two-stage collaborative training strategy is proposed. 
+Validation results on cross-domain detection datasets such as PASCAL VOC, ExDark, and RTTS indicate that this method effectively 
+improves detection accuracy under adverse conditions like fog and dark.
+
+Finally, this thesis integrates the aforementioned enhancement module with the detector and 
+tracker to construct a complete "Enhancement-Detection-Tracking" pipeline. 
+Experiments prove that this system can mitigate visual degradation from the source, 
+provide robust perceptual input for downstream tracking tasks, and significantly recover 
+tracking performance in synthetic degraded scenes. The results of this research provide 
+new insights and effective solutions for achieving stable and reliable multi-object tracking in complex environments.
+
+\vspace{2em}
+
+\textbf{Keywords}: Multiple Object Tracking; Graph Neural Networks; Graph Matching; Cross-domain Adaptation; Image Enhancement; Object Detection

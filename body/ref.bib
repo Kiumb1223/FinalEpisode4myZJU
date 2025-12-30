@@ -755,21 +755,31 @@
   type      = {EB/OL}
 }
 
-@article{adam,
-  title={Adam: A Method for Stochastic Optimization},
-  author={Diederik P. Kingma and Jimmy Ba},
-  journal={CoRR},
-  year={2014},
-  volume={abs/1412.6980},
+@inproceedings{adam,
+  author       = {Diederik P. Kingma and
+                  Jimmy Ba},
+  editor       = {Yoshua Bengio and
+                  Yann LeCun},
+  title        = {Adam: {A} Method for Stochastic Optimization},
+  booktitle    = {3rd International Conference on Learning Representations, {ICLR} 2015,
+                  San Diego, CA, USA, May 7-9, 2015, Conference Track Proceedings},
+  year         = {2015},
+  url          = {http://arxiv.org/abs/1412.6980},
+  timestamp    = {Thu, 25 Jul 2019 14:25:37 +0200},
+  biburl       = {https://dblp.org/rec/journals/corr/KingmaB14.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+@INPROCEEDINGS{imprassoc,
+author={Stadler, Daniel and Beyerer, Jürgen},
+booktitle={2023 IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)}, 
+title={An Improved Association Pipeline for Multi-Person Tracking}, 
+year={2023},
+volume={},
+number={},
+pages={3170-3179},
+keywords={Computer vision;Tracking;Conferences;Pipelines;Benchmark testing;Pattern recognition;Task analysis},
 }
 
-@inproceedings{imprassoc,
-author = {Stadler, Daniel and Beyerer, Jürgen},
-year = {2023},
-month = {06},
-pages = {3170-3179},
-title = {An Improved Association Pipeline for Multi-Person Tracking},
-}
 @inproceedings{ocsort,
   title={Observation-centric sort: Rethinking sort for robust multi-object tracking},
   author={Cao, Jinkun and Pang, Jiangmiao and Weng, Xinshuo and Khirodkar, Rawal and Kitani, Kris},
@@ -778,37 +788,80 @@ title = {An Improved Association Pipeline for Multi-Person Tracking},
   year={2023}
 }
 
-
-@article{botsort,
-  title={BoT-SORT: Robust Associations Multi-Pedestrian Tracking},
-  author={Aharon, Nir and Orfaig, Roy and Bobrovsky, Ben-Zion},
-  journal={arXiv preprint arXiv:2206.14651},
-  year={2022}
+@online{botsort,
+  author    = {N. Aharon and R. Orfaig and B.-Z. Bobrovsky},
+  title     = {{BoT-SORT}: Robust Associations Multi-Pedestrian Tracking},
+  year      = {2022},
+  date      = {2022-06-29},
+  url       = {https://arxiv.org/abs/2206.14651},
+  urldate   = {2025-12-13}, % 请修改为实际引用日期
+  note      = {arXiv preprint},
+  type      = {EB/OL}
 }
 
 @inproceedings{gsm,
-author = {Liu, Qiankun and Chu, Qi and Liu, Bin and Yu, Nenghai},
-year = {2020},
-month = {07},
-pages = {530-536},
-title = {GSM: Graph Similarity Model for Multi-Object Tracking},
+  author    = {Q. Liu and Q. Chu and B. Liu and N. Yu},
+  title     = {{GSM}: Graph Similarity Model for Multi-Object Tracking},
+  booktitle = {Proceedings of the International Joint Conference on Artificial Intelligence},
+  year      = {2020},
+  pages     = {530--536},
+  address   = {Yokohama, Japan}
 }
 
-
 @inproceedings{coco,
-  title={Microsoft coco: Common objects in context},
-  author={Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr and Zitnick, C Lawrence},
-  booktitle={European conference on computer vision},
-  pages={740--755},
-  year={2014},
-  organization={Springer}
+  author    = {T.-Y. Lin and M. Maire and S. Belongie and J. Hays and P. Perona and D. Ramanan and P. Doll{\'a}r and C. L. Zitnick},
+  title     = {Microsoft {COCO}: Common Objects in Context},
+  booktitle = {European Conference on Computer Vision},
+  year      = {2014},
+  pages     = {740--755},
+  address   = {Zurich, Switzerland},
+  publisher = {Springer}
 }
 
 @inproceedings{imagenet,
-  title={Imagenet: A large-scale hierarchical image database},
-  author={Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Li, Kai and Fei-Fei, Li},
-  booktitle={2009 IEEE conference on computer vision and pattern recognition},
-  pages={248--255},
-  year={2009},
-  organization={Ieee}
+  author    = {J. Deng and W. Dong and R. Socher and L.-J. Li and K. Li and L. Fei-Fei},
+  title     = {{ImageNet}: A Large-Scale Hierarchical Image Database},
+  booktitle = {IEEE Conference on Computer Vision and Pattern Recognition},
+  year      = {2009},
+  pages     = {248--255},
+  address   = {Miami, FL, USA},
+  publisher = {IEEE}
+}
+
+@inproceedings{color_loss_ref,
+  author    = {L. Zhao and X. Gong and K. Liu and J. Wang and B. Zhao and Y. Liu},
+  title     = {Color Channel Fusion Network For Low-Light Image Enhancement},
+  booktitle = {IEEE International Conference on Image Processing},
+  year      = {2021},
+  pages     = {1654--1658},
+  address   = {Anchorage, AK, USA},
+  publisher = {IEEE}
+}
+
+@inproceedings{vgg,
+  author    = {K. Simonyan and A. Zisserman},
+  title     = {Very Deep Convolutional Networks for Large-Scale Image Recognition},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2015},
+  address   = {San Diego, CA, USA}
+}
+
+@software{v8,
+author = {Jocher, Glenn and Chaurasia, Ayush and Qiu, Jing},
+license = {AGPL-3.0},
+month = jan,
+title = {{Ultralytics YOLO}},
+url = {https://github.com/ultralytics/ultralytics},
+version = {8.0.0},
+year = {2023}
+}
+@INPROCEEDINGS{rt—detr,
+  author={Zhao, Yian and Lv, Wenyu and Xu, Shangliang and Wei, Jinman and Wang, Guanzhong and Dang, Qingqing and Liu, Yi and Chen, Jie},
+  booktitle={2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, 
+  title={DETRs Beat YOLOs on Real-time Object Detection}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={16965-16974},
+  keywords={YOLO;Computer vision;Accuracy;Graphics processing units;Detectors;Transformers;Real-time systems;Real-time Object Detection;YOLO;DETR},
 }
